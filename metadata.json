@@ -1,0 +1,6 @@
+{
+  "name": "Rezidence Parková | Ondřej Porner Reality",
+  "description": "Interaktivní nabídka bytů v moderní 4-podlažní rezidenci s detailními půdorysy, hypoteční kalkulačkou a online rezervací.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
