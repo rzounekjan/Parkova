@@ -31,7 +31,7 @@ export const FLOORS_DATA: FloorInfo[] = [
     topPercent: 14,
     heightPercent: 22,
     apartmentsCount: 3,
-    availableCount: 1,
+    availableCount: 0,
     priceFrom: 7990000,
     apartments: [
       {
@@ -91,7 +91,7 @@ export const FLOORS_DATA: FloorInfo[] = [
         orientation: 'Jihovýchod (J/V)',
         price: 11250000,
         pricePerM2: 130208,
-        status: 'available',
+        status: 'reserved',
         cellarIncluded: true,
         cellarArea: 3.8,
         parkingIncluded: true,
@@ -105,7 +105,7 @@ export const FLOORS_DATA: FloorInfo[] = [
           'Vlastní sklepní kóje a garážové stání s nabíječkou pro EV',
           'Dřevěné dubové třívrstvé podlahy'
         ],
-        description: 'Velice žádaný střešní byt 3+kk s perfektním dispozičním řešením. Z obou ložnic i z obývacího pokoje je přímý vstup na terasu s dřevěným deckingem.',
+        description: 'Velice žádaný střešní byt 3+kk s perfektním dispozičním řešením. Z obou ložnic i z obývacího pokoje je přímý vstup na terasu s dřevěným deckingem. V současnosti je tento byt předrezervován.',
         floorPlanType: 'family-spacious',
         rooms: [
           { name: 'Obývací pokoj + kk', area: 36.4, dimensions: '6,8 × 5,3 m', type: 'living' },
