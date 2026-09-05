@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Apartment, RoomDetail } from '../types';
 import { Maximize2, Layers, Compass, ZoomIn, ZoomOut, RotateCcw, Check, Sparkles } from 'lucide-react';
 import floorplanSampleImg from '../assets/images/floorplan_apartment_sample_1788430356800.jpg';
+import { GardenResidenceFloorPlan } from './GardenResidenceFloorPlan';
 
 interface FloorPlanViewerProps {
   apartment: Apartment;
@@ -11,6 +12,8 @@ export const FloorPlanViewer: React.FC<FloorPlanViewerProps> = ({ apartment }) =
   const [activeRoomIndex, setActiveRoomIndex] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'vector' | 'blueprint'>('vector');
   const [zoomLevel, setZoomLevel] = useState<number>(1);
+
+  const isGardenResidence = apartment.code === '1.1' || apartment.floorPlanType === 'garden-residence';
 
   // SVG floor plan schematic tailored to apartment disposition
   const getRoomColor = (type?: string, isHovered?: boolean) => {
@@ -98,27 +101,27 @@ export const FloorPlanViewer: React.FC<FloorPlanViewerProps> = ({ apartment }) =
       </div>
 
       {/* Main Floor Plan Graphic Area */}
-      <div className="relative bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-[340px] flex items-center justify-center p-4">
-        {/* Subtle grid background */}
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle, #94a3b8 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
-          }}
-        />
+      {viewMode === 'blueprint' ? (
+        <div className="relative bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-[340px] flex items-center justify-center p-4">
+          {/* Subtle grid background */}
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle, #94a3b8 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+            }}
+          />
 
-        {/* Compass indicator */}
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-xs border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs font-medium text-slate-700 shadow-xs z-10">
-          <div className="w-4 h-4 relative flex items-center justify-center">
-            <span className="text-[10px] font-bold text-blue-700 -top-1 absolute">S</span>
-            <div className="w-0.5 h-3 bg-blue-600 rounded-full" />
+          {/* Compass indicator */}
+          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-xs border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs font-medium text-slate-700 shadow-xs z-10">
+            <div className="w-4 h-4 relative flex items-center justify-center">
+              <span className="text-[10px] font-bold text-blue-700 -top-1 absolute">S</span>
+              <div className="w-0.5 h-3 bg-blue-600 rounded-full" />
+            </div>
+            <span>{apartment.orientation}</span>
           </div>
-          <span>{apartment.orientation}</span>
-        </div>
 
-        {viewMode === 'blueprint' ? (
           <div
             className="w-full flex items-center justify-center transition-transform duration-200"
             style={{ transform: `scale(${zoomLevel})` }}
@@ -130,7 +133,37 @@ export const FloorPlanViewer: React.FC<FloorPlanViewerProps> = ({ apartment }) =
               referrerPolicy="no-referrer"
             />
           </div>
-        ) : (
+        </div>
+      ) : isGardenResidence ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <GardenResidenceFloorPlan
+            apartment={apartment}
+            activeRoomIndex={activeRoomIndex}
+            onSelectRoom={setActiveRoomIndex}
+            zoomLevel={zoomLevel}
+          />
+        </div>
+      ) : (
+        <div className="relative bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-[340px] flex items-center justify-center p-4">
+          {/* Subtle grid background */}
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle, #94a3b8 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+            }}
+          />
+
+          {/* Compass indicator */}
+          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-xs border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs font-medium text-slate-700 shadow-xs z-10">
+            <div className="w-4 h-4 relative flex items-center justify-center">
+              <span className="text-[10px] font-bold text-blue-700 -top-1 absolute">S</span>
+              <div className="w-0.5 h-3 bg-blue-600 rounded-full" />
+            </div>
+            <span>{apartment.orientation}</span>
+          </div>
+
           <div
             className="w-full flex items-center justify-center transition-transform duration-200 select-none py-2"
             style={{ transform: `scale(${zoomLevel})` }}
@@ -403,8 +436,8 @@ export const FloorPlanViewer: React.FC<FloorPlanViewerProps> = ({ apartment }) =
               <line x1="430" y1="250" x2="430" y2="370" className="stroke-slate-400 stroke-2" />
             </svg>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Room Dimensions Breakdown Table */}
       <div>
@@ -425,11 +458,12 @@ export const FloorPlanViewer: React.FC<FloorPlanViewerProps> = ({ apartment }) =
               <div
                 key={room.name}
                 id={`room-item-${idx}`}
+                onClick={() => setActiveRoomIndex(activeRoomIndex === idx ? null : idx)}
                 onMouseEnter={() => setActiveRoomIndex(idx)}
-                onMouseLeave={() => setActiveRoomIndex(null)}
+                onMouseLeave={() => {}}
                 className={`flex items-center justify-between p-2.5 rounded-lg border text-xs transition-all cursor-pointer ${
                   isHovered
-                    ? 'bg-blue-50 border-blue-300 shadow-xs'
+                    ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-400/20 shadow-xs'
                     : 'bg-white border-slate-200 hover:bg-slate-50'
                 }`}
               >
